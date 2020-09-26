@@ -1,0 +1,63 @@
+@model IEnumerable<MvcWebsite.Models.Board>
+
+@{
+    ViewData["Title"] = "the boards";
+    int colCount = 0;
+}
+<div class="container justify-content-sm-center">
+
+    <div class="row mb-3 justify-content-center border-bottom">
+        <div class="col-md-auto mb-2">
+            <h1>@ViewData["Title"] <small><a class="menu-item" asp-action="Create">+new</a></small></h1>
+        </div>
+    </div>
+
+    <div class="row mb-1 justify-content-center">
+        @foreach (var item in Model) {
+            
+            if (colCount > 0 && colCount % 4 == 0)
+            {
+                @:</div><div class="row mb-1 justify-content-center">
+                colCount = 0;
+            } else {
+                colCount++;
+            }
+
+            <div class="col-xs-6 col-md-4 col-lg-3">
+                <div class="row">
+                    <div class="col-12 mb-1">
+                        <div class="peg-yellow">
+                            <div class="center">
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-auto">
+                                        <p style="font-weight:bolder;">@Html.DisplayFor(modelItem => item.Title)</p>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-auto">
+                                        <p>@Html.DisplayFor(modelItem => item.Text)</p>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col">
+                                        <p><small>@Html.DisplayFor(modelItem => item.Tags)</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-controller="Board" asp-route-id="@item.Id"><img class="small-image" src="/images/edit.png" alt=""></a> | 
+                            <a asp-action="Details" asp-controller="Board" asp-route-id="@item.Id"><img class="small-image" src="/images/look.png" alt=""></a> |
+                            <a asp-action="Delete"asp-controller="Board" asp-route-id="@item.Id"><img class="small-image" src="/images/delete.png" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

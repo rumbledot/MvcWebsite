@@ -1,0 +1,9 @@
+/.vs
+/.vscode
+/appsettings.Development.json
+/appsettings.json
+/bin
+/Migrations
+/MvcWebsite.csproj.user
+/obj
+/Properties
