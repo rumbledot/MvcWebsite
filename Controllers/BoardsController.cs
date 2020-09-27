@@ -12,6 +12,12 @@ namespace MvcWebsite.Controllers
 {
     public class BoardsController : Controller
     {
+        public const string PEG_WHITE = "white";
+        public const string PEG_YELLOW = "yellow";
+        public const string PEG_GREEN = "green";
+        public const string PEG_BLUE = "blue";
+        public const string PEG_PINK = "pink";
+
         private readonly MvcWebsiteContext _context;
 
         public BoardsController(MvcWebsiteContext context)
@@ -46,7 +52,7 @@ namespace MvcWebsite.Controllers
         // GET: Boards/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new BoardColorSelectorViewModel());
         }
 
         // POST: Boards/Create
@@ -54,8 +60,9 @@ namespace MvcWebsite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,CreatedAt,Text,Tags")] Board board)
+        public async Task<IActionResult> Create([Bind("Id,Title,CreatedAt,Text,Tags,BoardColor")] Board board)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(board);

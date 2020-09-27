@@ -27,6 +27,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("1989-2-12"),
                         Text = "This is a test board 01",
                         Tags = "",
+                        BoardColor = "white",
                     },
 
                     new Board
@@ -35,6 +36,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("1990-2-12"),
                         Text = "This is a test board 02",
                         Tags = "",
+                        BoardColor = "yellow",
                     },
 
                     new Board
@@ -43,6 +45,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("2001-2-12"),
                         Text = "This is a test board 03",
                         Tags = "",
+                        BoardColor = "blue",
                     },
 
                     new Board
@@ -51,6 +54,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("2010-2-12"),
                         Text = "This is a test board 04",
                         Tags = "",
+                        BoardColor = "green",
                     },
 
                     new Board
@@ -59,6 +63,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("1989-2-12"),
                         Text = "This is a test board 05",
                         Tags = "",
+                        BoardColor = "pink",
                     },
 
                     new Board
@@ -67,6 +72,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("1990-2-12"),
                         Text = "This is a test board 06",
                         Tags = "",
+                        BoardColor = "blue",
                     },
 
                     new Board
@@ -75,6 +81,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("2001-2-12"),
                         Text = "This is a test board 07",
                         Tags = "",
+                        BoardColor = "pink",
                     },
 
                     new Board
@@ -83,6 +90,7 @@ namespace MvcWebsite.Models
                         CreatedAt = DateTime.Parse("2010-2-12"),
                         Text = "This is a test board 08",
                         Tags = "",
+                        BoardColor = "green",
                     }
 
                 );

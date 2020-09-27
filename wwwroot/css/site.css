@@ -21,8 +21,16 @@
   background-color:rgb(248,215,218) !important;
 }
 
+.peg-white {
+    background-image: url('/images/border.png') !important;
+    background-size: 250px 200px;
+    height: 200px;
+    width: 250px;
+    padding: 10px;
+}
+
 .peg-yellow {
-  background-image: url('/images/border.png') !important;
+  background-image: url('/images/border-yellow.png') !important;
   background-size: 250px 200px;
   height: 200px;
   width: 250px;
@@ -30,27 +38,27 @@
 }
 
 .peg-blue {
-  background-image: url('/images/note_blue.png') !important;
-  background-size: 250px 200px;
-  height: 200px;
-  width: 250px;
-  padding:10px;
+    background-image: url('/images/border-blue.png') !important;
+    background-size: 250px 200px;
+    height: 200px;
+    width: 250px;
+    padding: 10px;
 }
 
 .peg-green {
-  background-image: url('/images/note_green.png') !important;
-  background-size: 250px 200px;
-  height: 200px;
-  width: 250px;
-  padding:10px;
+    background-image: url('/images/border-green.png') !important;
+    background-size: 250px 200px;
+    height: 200px;
+    width: 250px;
+    padding: 10px;
 }
 
 .peg-pink {
-  background-image: url('/images/note_pink.png') !important;
-  background-size: 250px 200px;
-  height: 200px;
-  width: 250px;
-  padding:10px;
+    background-image: url('/images/border-pink.png') !important;
+    background-size: 250px 200px;
+    height: 200px;
+    width: 250px;
+    padding: 10px;
 }
 
 .fullScreen {
@@ -83,6 +91,10 @@
 .small-image {
   height: 20px; 
   width: 20px; 
+}
+
+textarea {
+    resize: none;
 }
 
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
