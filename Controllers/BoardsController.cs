@@ -52,24 +52,37 @@ namespace MvcWebsite.Controllers
         // GET: Boards/Create
         public IActionResult Create()
         {
-            return View(new BoardColorSelectorViewModel());
+            var vm = new BoardColorSelectorViewModel();
+            vm.NewBoard = new Board()
+            {
+                BoardColor = "white"
+            };
+            return View(vm);
         }
 
         // POST: Boards/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,CreatedAt,Text,Tags,BoardColor")] Board board)
+        public async Task<IActionResult> Create([Bind("NewBoard.Id,NewBoard.Title,NewBoard.Text,NewBoard.Tags,NewBoard.BoardColor")] BoardColorSelectorViewModel vm)
         {
-
             if (ModelState.IsValid)
             {
+                Board board = new Board()
+                {
+                    Title = HttpContext.Request.Form["NewBoard.Title"].ToString(),
+                    Text = HttpContext.Request.Form["NewBoard.Text"].ToString(),
+                    Tags = HttpContext.Request.Form["NewBoard.Tags"].ToString(),
+                    BoardColor = HttpContext.Request.Form["NewBoard.BoardColor"].ToString(),
+                };
+
                 _context.Add(board);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(board);
+
+            return View();
+            
+
         }
 
         // GET: Boards/Edit/5
@@ -85,7 +98,11 @@ namespace MvcWebsite.Controllers
             {
                 return NotFound();
             }
-            return View(board);
+
+            var vm = new BoardColorSelectorViewModel();
+            vm.NewBoard = board;
+
+            return View(vm);
         }
 
         // POST: Boards/Edit/5
@@ -93,9 +110,13 @@ namespace MvcWebsite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,CreatedAt,Text,Tags")] Board board)
+        public async Task<IActionResult> Edit(int id, [Bind("NewBoard.Id,NewBoard.Title,NewBoard.Text,NewBoard.Tags,NewBoard.BoardColor")] BoardColorSelectorViewModel vm)
         {
-            if (id != board.Id)
+            var editedID = Convert.ToInt32(HttpContext.Request.Form["NewBoard.Id"]);
+            Console.WriteLine("POST Edit controller");
+            Console.WriteLine("ID : " + id);
+            Console.WriteLine("ID form : " + editedID);
+            if (id != editedID)
             {
                 return NotFound();
             }
@@ -104,12 +125,22 @@ namespace MvcWebsite.Controllers
             {
                 try
                 {
+                    Console.WriteLine("Trying to save to DB");
+                    Board board = new Board()
+                    {
+                        Id = editedID,
+                        Title = HttpContext.Request.Form["NewBoard.Title"].ToString(),
+                        Text = HttpContext.Request.Form["NewBoard.Text"].ToString(),
+                        Tags = HttpContext.Request.Form["NewBoard.Tags"].ToString(),
+                        BoardColor = HttpContext.Request.Form["NewBoard.BoardColor"].ToString(),
+                    };
+
                     _context.Update(board);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BoardExists(board.Id))
+                    if (!BoardExists(editedID))
                     {
                         return NotFound();
                     }
@@ -120,7 +151,7 @@ namespace MvcWebsite.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(board);
+            return View(vm);
         }
 
         // GET: Boards/Delete/5

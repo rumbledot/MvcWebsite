@@ -16,27 +16,31 @@ namespace MvcWebsite.Models
 
         public int Id { get; set; }
 
-        [StringLength(60, MinimumLength = 3)]
+        [StringLength(60, MinimumLength = 3, ErrorMessage = "title board length is 3-60 chars")]
         [Required]
         public string Title { get; set; }
 
         [Display(Name = "Created at")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreatedAt { get; set; }
 
-        [StringLength(255, MinimumLength = 10)]
+        [StringLength(255, MinimumLength = 10, ErrorMessage = "text board length is 10-255 chars")]
         [Required]
         public string Text { get; set; }
 
         [StringLength(60)]
         public string Tags { get; set; }
 
-        [StringLength(6, MinimumLength = 4)]
         [Display(Name = "Pick Board's Color")]
         public string BoardColor { get; set; }
+        public virtual ICollection<Stiky> Stikies { get; set; }
         public string ColorClass {
             get {
+                if (string.IsNullOrEmpty(BoardColor))
+                {
+                    BoardColor = "white";
+                }
                 return "peg-" + BoardColor;
             }
         }

@@ -11,5 +11,6 @@ namespace MvcWebsite.Data
         }
 
         public DbSet<Board> Board { get; set; }
+        public DbSet<Stiky> Stiky { get; set; }
     }
 }

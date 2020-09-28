@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MvcWebsite.Data;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MvcWebsite.Models
@@ -28,6 +29,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 01",
                         Tags = "",
                         BoardColor = "white",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -37,6 +39,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 02",
                         Tags = "",
                         BoardColor = "yellow",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -46,6 +49,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 03",
                         Tags = "",
                         BoardColor = "blue",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -55,6 +59,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 04",
                         Tags = "",
                         BoardColor = "green",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -64,6 +69,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 05",
                         Tags = "",
                         BoardColor = "pink",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -73,6 +79,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 06",
                         Tags = "",
                         BoardColor = "blue",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -82,6 +89,7 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 07",
                         Tags = "",
                         BoardColor = "pink",
+                        Stikies = new List<Stiky>()
                     },
 
                     new Board
@@ -91,8 +99,48 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 08",
                         Tags = "",
                         BoardColor = "green",
+                        Stikies = new List<Stiky>()
                     }
 
+                );
+
+                context.Stiky.AddRange(
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 01",
+                        BoardId = 1,
+                    },
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 02",
+                        BoardId = 1,
+                    },
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 03",
+                        BoardId = 1,
+                    },
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 04",
+                        BoardId = 1,
+                    },
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 05",
+                        BoardId = 1,
+                    },
+                    new Stiky
+                    {
+                        CreatedAt = DateTime.Parse("1989-2-12"),
+                        Text = "This is stiky 06",
+                        BoardId = 2,
+                    }
                 );
                 context.SaveChanges();
             }

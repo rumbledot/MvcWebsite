@@ -3,22 +3,29 @@
 }
 
 /* Colors */
+.bg-white {
+    background-color: rgb(246,246,246);
+    width:90vw;
+}
+
 .bg-green {
-  background-color:rgb(212,237,218) !important;
+    background-color: rgb(212,237,218);
+    width: 90vw;
 }
 
 .bg-yellow {
-  background-color:rgb(255,243,205) !important;
-  height: 200px;
-  width: 200px;
+    background-color: rgb(255,243,205);
+    width: 90vw;
 }
 
 .bg-blue {
-  background-color:rgb(209,236,241) !important;
+    background-color: rgb(209,236,241);
+    width: 90vw;
 }
 
 .bg-pink {
-  background-color:rgb(248,215,218) !important;
+    background-color: rgb(248,215,218);
+    width: 90vw;
 }
 
 .peg-white {

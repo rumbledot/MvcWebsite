@@ -15,15 +15,10 @@
     <div class="row mb-1 justify-content-center">
         @foreach (var item in Model)
         {
-
-            if (colCount > 0 && colCount % 4 == 0)
+            if (colCount > 3)
             {
             @:</div><div class="row mb-1 justify-content-center">
                 colCount = 0;
-            }
-            else
-            {
-                colCount++;
             }
 
             <div class="col-auto col-lg-3 col-md-6 col-sm-12">
@@ -60,6 +55,8 @@
                     </div>
                 </div>   
             </div>
+
+            colCount++;
         }
     </div>
 

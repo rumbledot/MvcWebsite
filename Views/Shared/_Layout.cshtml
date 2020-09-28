@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+
+    <script src="~/lib/jquery/dist/jquery-3.5.1.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light mb-3">
             <div class="container">
@@ -44,10 +51,5 @@
             &copy; 2020 - Peg' boards - <a asp-area="" asp-controller="Home" asp-action="About">About</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery-3.5.1.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
 </body>
 </html>
