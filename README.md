@@ -128,7 +128,7 @@ Which look something like this:
 </form>
 ```
 
-I am using Razor @Html helper
+to Razor @Html helper
 
 ```
 @using (Html.BeginForm())
@@ -183,5 +183,5 @@ I am using Razor @Html helper
 
 10. Don't forget to specify object's Id when update an entry
 
-### triky stuffs
-I move <scripts> below <head> in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
+### tricky stuffs
+I move scripts tag below head tag in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
