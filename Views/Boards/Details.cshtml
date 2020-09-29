@@ -2,48 +2,67 @@
 
 @{
     ViewData["Title"] = "details";
+    var board = (Board)ViewData["board"];
+    var stikies = (IEnumerable<Stiky>)ViewData["stikies"];
+    string newText;
+}
+
+@section Scripts {
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
+    {
+        @Html.AntiForgeryToken()
+    }
 }
 
 <div class="container justify-content-center">
 
-    <div class="row mb-3 justify-content-center border-bottom">
-        <div class="col-auto mb-2 justify-content-center bg-@Model.BoardColor">
-            <h3>@Html.DisplayFor(model => model.Title)</h3>
+    <div class="row">
+        <p><small>@board.CreatedAt</small></p>
+    </div>
+    <div class="row mb-1 justify-content-center">
+        <div class="col-8 mb-2 justify-content-center bg-@board.BoardColor">
+            <h3>@board.Title</h3>
+        </div>
+    </div>
+    <div class="row mb-3 border-bottom">
+        <p><small>@board.Tags</small></p>
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+        <div class="btn-group border-bottom">
+            <a asp-action="Edit" asp-route-id="@board.Id" class="btn btn-sm btn-dark">Edit</a>
+            <a class="btn btn-light btn-block" asp-action="Index"><img class="small-image" src="/images/to_boards.png" alt="">&nbsp;boards</a>
         </div>
     </div>
 
     <div class="row mb-3 justify-content-center">
-        <div class="col-md-4">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Title)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Title)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.CreatedAt)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.CreatedAt)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Text)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Text)
-                </dd>
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Tags)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Tags)
-                </dd>
-            </dl>
-        </div>
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
+        <div class="col-8">
+            @board.Text
         </div>
     </div>
+
+    <div id="container-stikies" class="row mb-3 justify-content-center">
+        @foreach (Stiky s in stikies)
+        {
+            <div class="col-8" style="word-wrap:break-word">
+                <div>
+                    <p>@s.Text</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row mb-3 justify-content-center">
+        <div class="col-6">
+            <label for="newStiky" class="sr-only">New Stiky note</label>
+            <textarea name="newStiky" class="form-control" id="newStiky" placeholder="New stiky note" rows="4" maxlength="255"></textarea>
+        </div>
+        <div class="col-2">
+            <button onclick="addNewStiky(@board.Id)" class="btn btn-sm btn-light">Add</button>
+            <p id="wordCounter">255</p>
+        </div>
+    </div>
+
 </div>
+
+<script src="~/js/scripts.js" asp-append-version="true"></script>

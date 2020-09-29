@@ -46,7 +46,41 @@ namespace MvcWebsite.Controllers
                 return NotFound();
             }
 
-            return View(board);
+            IEnumerable<Stiky> stikies = from s in _context.Stiky
+                          where s.BoardId==board.Id
+                          select s;
+
+            ViewData["board"] = board;
+            ViewData["stikies"] = stikies;
+
+            return View();
+        }
+
+        // POST: Boards/NewStiky
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewStiky([FromBody] Stiky stiky)
+        {
+            string text = stiky.Text;
+            if (!string.IsNullOrEmpty(text) && text.Length > 4 && text.Length < 255)
+            {
+                Stiky newS = new Stiky()
+                {
+                    Text = stiky.Text,
+                    BoardId = stiky.BoardId
+                };
+
+                _context.Add(newS);
+                await _context.SaveChangesAsync();
+            };
+
+            IEnumerable<Stiky> stikies = from s in _context.Stiky
+                                             where s.BoardId == stiky.BoardId
+                                             select s;
+
+            JsonResult res = new JsonResult(stikies);
+
+            return (res);
         }
 
         // GET: Boards/Create
@@ -81,8 +115,6 @@ namespace MvcWebsite.Controllers
             }
 
             return View();
-            
-
         }
 
         // GET: Boards/Edit/5
@@ -106,16 +138,12 @@ namespace MvcWebsite.Controllers
         }
 
         // POST: Boards/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("NewBoard.Id,NewBoard.Title,NewBoard.Text,NewBoard.Tags,NewBoard.BoardColor")] BoardColorSelectorViewModel vm)
         {
             var editedID = Convert.ToInt32(HttpContext.Request.Form["NewBoard.Id"]);
-            Console.WriteLine("POST Edit controller");
-            Console.WriteLine("ID : " + id);
-            Console.WriteLine("ID form : " + editedID);
+
             if (id != editedID)
             {
                 return NotFound();
@@ -125,7 +153,6 @@ namespace MvcWebsite.Controllers
             {
                 try
                 {
-                    Console.WriteLine("Trying to save to DB");
                     Board board = new Board()
                     {
                         Id = editedID,

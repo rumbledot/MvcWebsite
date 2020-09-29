@@ -16,12 +16,9 @@ namespace MvcWebsite.Models
                     DbContextOptions<MvcWebsiteContext>>()))
             {
                 // Look for any movies.
-                if (context.Board.Any())
+                if (!context.Board.Any())
                 {
-                    return;   // DB has been seeded
-                }
-
-                context.Board.AddRange(
+                    context.Board.AddRange(
                     new Board
                     {
                         Title = "Test Board 01",
@@ -89,7 +86,18 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 07",
                         Tags = "",
                         BoardColor = "pink",
-                        Stikies = new List<Stiky>()
+                        Stikies = new List<Stiky>() {
+                            new Stiky
+                            {
+                                CreatedAt = DateTime.Parse("2010-2-12"),
+                                Text = "Stiky 03"
+                            },
+                            new Stiky
+                            {
+                                CreatedAt = DateTime.Parse("2010-2-12"),
+                                Text = "Stiky 04"
+                            }
+                        }
                     },
 
                     new Board
@@ -99,50 +107,57 @@ namespace MvcWebsite.Models
                         Text = "This is a test board 08",
                         Tags = "",
                         BoardColor = "green",
-                        Stikies = new List<Stiky>()
+                        Stikies = new List<Stiky>() {
+                            new Stiky
+                            {
+                                CreatedAt = DateTime.Parse("2010-2-12"),
+                                Text = "Stiky 01"
+                            },
+                            new Stiky
+                            {
+                                CreatedAt = DateTime.Parse("2010-2-12"),
+                                Text = "Stiky 02"
+                            }
+                        }
+                        
                     }
 
                 );
+                    context.SaveChanges();
+                }
 
-                context.Stiky.AddRange(
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 01",
-                        BoardId = 1,
-                    },
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 02",
-                        BoardId = 1,
-                    },
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 03",
-                        BoardId = 1,
-                    },
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 04",
-                        BoardId = 1,
-                    },
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 05",
-                        BoardId = 1,
-                    },
-                    new Stiky
-                    {
-                        CreatedAt = DateTime.Parse("1989-2-12"),
-                        Text = "This is stiky 06",
-                        BoardId = 2,
-                    }
-                );
-                context.SaveChanges();
+                if (!context.Stiky.Any())
+                {
+                    context.Stiky.AddRange(
+
+                        new Stiky
+                        {
+                            CreatedAt = DateTime.Parse("2010-2-12"),
+                            Text = "Stiky 01",
+                            BoardId = 0
+                        },
+
+                        new Stiky
+                        {
+                            CreatedAt = DateTime.Parse("2010-2-12"),
+                            Text = "Stiky 02",
+                            BoardId = 0
+                        },
+
+                        new Stiky
+                        {
+                            CreatedAt = DateTime.Parse("2010-2-12"),
+                            Text = "Stiky 03",
+                            BoardId = 0
+                        }
+
+                    );
+                    context.SaveChanges();
+                }
+
+                return;   // DB has been seeded
+
+
             }
         }
     }

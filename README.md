@@ -184,4 +184,59 @@ I am using Razor @Html helper
 10. Don't forget to specify object's Id when update an entry
 
 ### triky stuffs
-I move <scripts> below <head> in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
+1. I move <scripts> below <head> in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
+
+2. pass Verification token in the ajax header. Like so:
+```
+    var form = $('#__AjaxAntiForgeryForm');
+    var token = $('input[name="__RequestVerificationToken"]', form).val();
+
+    if (StikyText || StikyText.length > 4) {
+        $.ajax({
+            url: "/Boards/NewStiky",
+            headers: {
+                "RequestVerificationToken": token
+            },
+```
+
+3. pass ajax data as object and received it in the Controller as a Model or Object with the same properties.
+```
+            type: "POST",
+            data: JSON.stringify({
+                Text: StikyText,
+                BoardId: id
+            }),
+```
+
+in the controller : in the function parameter add [FromBody] Object obj !!!
+
+return it as JsonResult object
+
+```
+        // POST: Boards/NewStiky
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewStiky([FromBody] Stiky stiky)
+        {
+            string text = stiky.Text;
+            if (!string.IsNullOrEmpty(text) && text.Length > 4 && text.Length < 255)
+            {
+                Stiky newS = new Stiky()
+                {
+                    Text = stiky.Text,
+                    BoardId = stiky.BoardId
+                };
+
+                _context.Add(newS);
+                await _context.SaveChangesAsync();
+            };
+
+            IEnumerable<Stiky> stikies = from s in _context.Stiky
+                                             where s.BoardId == stiky.BoardId
+                                             select s;
+
+            JsonResult res = new JsonResult(stikies);
+
+            return (res);
+        }
+```
