@@ -128,7 +128,7 @@ Which look something like this:
 </form>
 ```
 
-I am using Razor @Html helper
+to Razor @Html helper
 
 ```
 @using (Html.BeginForm())
