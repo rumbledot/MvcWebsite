@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcWebsite.Data;
 using MvcWebsite.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace MvcWebsite.Controllers
 {
@@ -19,10 +23,12 @@ namespace MvcWebsite.Controllers
         public const string PEG_PINK = "pink";
 
         private readonly MvcWebsiteContext _context;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
-        public BoardsController(MvcWebsiteContext context)
+        public BoardsController(MvcWebsiteContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         // GET: Boards
@@ -56,6 +62,16 @@ namespace MvcWebsite.Controllers
             return View();
         }
 
+        public async Task<IActionResult> GetStikies(int Id) {
+            IEnumerable<Stiky> stikies = from s in _context.Stiky
+                                         where s.BoardId == Id
+                                         select s;
+
+            JsonResult res = new JsonResult(stikies);
+
+            return (res);
+        }
+
         // POST: Boards/NewStiky
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -66,6 +82,7 @@ namespace MvcWebsite.Controllers
             {
                 Stiky newS = new Stiky()
                 {
+                    Type = "text",
                     Text = stiky.Text,
                     BoardId = stiky.BoardId
                 };
@@ -81,6 +98,42 @@ namespace MvcWebsite.Controllers
             JsonResult res = new JsonResult(stikies);
 
             return (res);
+        }
+
+        // POST: Boards/NewStikyImage
+        [HttpPost]
+        public async Task<IActionResult> NewStikyImage(IFormFile newStikyPic)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            Console.WriteLine("FILE : " + newStikyPic);
+            Console.WriteLine("WebRootPath : " + webRootPath);
+            Console.WriteLine("WebRootPath : " + contentRootPath);
+
+            if (ModelState.IsValid)
+            {
+                string[] AllowedFileExtensions = new string[] { ".jpg", ".gif", ".png", ".jpeg" };
+
+                if (!AllowedFileExtensions.Contains(newStikyPic.FileName.Substring(newStikyPic.FileName.LastIndexOf('.'))))
+                {
+                    ModelState.AddModelError("File", "Please file of type: " + string.Join(", ", AllowedFileExtensions));
+                }
+                Console.WriteLine("PAST THE EXTENSION IF BLOCK");
+
+                //string webRootPath = _hostingEnvironment.WebRootPath;
+                //string contentRootPath = _hostingEnvironment.ContentRootPath;
+
+                var fileName = Path.GetFileName(newStikyPic.FileName);
+                var path = Path.Combine(webRootPath, "uploaded", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await newStikyPic.CopyToAsync(fileStream);
+                }
+                ModelState.Clear();
+                ViewBag.Message = "File uploaded successfully";
+
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Boards/Create

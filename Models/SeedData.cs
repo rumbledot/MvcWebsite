@@ -90,11 +90,13 @@ namespace MvcWebsite.Models
                             new Stiky
                             {
                                 CreatedAt = DateTime.Parse("2010-2-12"),
+                                Type = "text",
                                 Text = "Stiky 03"
                             },
                             new Stiky
                             {
                                 CreatedAt = DateTime.Parse("2010-2-12"),
+                                Type = "text",
                                 Text = "Stiky 04"
                             }
                         }
@@ -111,11 +113,13 @@ namespace MvcWebsite.Models
                             new Stiky
                             {
                                 CreatedAt = DateTime.Parse("2010-2-12"),
+                                Type = "text",
                                 Text = "Stiky 01"
                             },
                             new Stiky
                             {
                                 CreatedAt = DateTime.Parse("2010-2-12"),
+                                Type = "text",
                                 Text = "Stiky 02"
                             }
                         }
@@ -123,35 +127,6 @@ namespace MvcWebsite.Models
                     }
 
                 );
-                    context.SaveChanges();
-                }
-
-                if (!context.Stiky.Any())
-                {
-                    context.Stiky.AddRange(
-
-                        new Stiky
-                        {
-                            CreatedAt = DateTime.Parse("2010-2-12"),
-                            Text = "Stiky 01",
-                            BoardId = 0
-                        },
-
-                        new Stiky
-                        {
-                            CreatedAt = DateTime.Parse("2010-2-12"),
-                            Text = "Stiky 02",
-                            BoardId = 0
-                        },
-
-                        new Stiky
-                        {
-                            CreatedAt = DateTime.Parse("2010-2-12"),
-                            Text = "Stiky 03",
-                            BoardId = 0
-                        }
-
-                    );
                     context.SaveChanges();
                 }
 

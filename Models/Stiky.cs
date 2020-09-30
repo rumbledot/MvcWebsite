@@ -13,8 +13,9 @@ namespace MvcWebsite.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MMM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime CreatedAt { get; set; }
+        public string Type { get; set; }
 
-        [StringLength(255, MinimumLength = 10, ErrorMessage = "text board length is 10-255 chars")]
+        [StringLength(1000, MinimumLength = 10, ErrorMessage = "text board length is 10-255 chars")]
         [Required]
         public string Text { get; set; }
         public int BoardId { get; set; }
@@ -22,6 +23,7 @@ namespace MvcWebsite.Models
 
         public Stiky()
         {
+            Type = "text";
             CreatedAt = DateTime.Today;
         }
     }

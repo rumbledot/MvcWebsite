@@ -3,9 +3,7 @@ A blog of a non blogger.
 
 This project is an exercise of building an application using .NET MVC architecture and Azure deployment.
 
-The application developed using C#, Razor, JavaScript, jQuery, Bootstrap4 and SQL.
-
-The exercise also demonstrate how to use jQuery ajax to send and receiv JSON to/from Controller using built in verification token.
+The application developed using C#, Razor and SQL.
 
 The project was deployed to Azure App Service and the database is deployed to SQL Server.
 
@@ -185,12 +183,9 @@ to Razor @Html helper
 
 10. Don't forget to specify object's Id when update an entry
 
-11. use IWebHostEnvironment when working with file using .NET core. webRootHost will return the wwwwroot/ folder.
-
-12. IFormFile is the type you want to use in the Controller parameter when working with file upload.
-
-### tricky stuffs
-1. I move scripts tags below head tags in _Layout.cshtml. This will making sure jQueries are loaded before our scripts.
+<<<<<<< HEAD
+### triky stuffs
+1. I move <scripts> below <head> in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
 
 2. pass Verification token in the ajax header. Like so:
 ```
@@ -203,17 +198,6 @@ to Razor @Html helper
             headers: {
                 "RequestVerificationToken": token
             },
-```
-
-and in Razor page add:
-
-```
-@section Scripts {
-    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__AjaxAntiForgeryForm" }))
-    {
-        @Html.AntiForgeryToken()
-    }
-}
 ```
 
 3. pass ajax data as object and received it in the Controller as a Model or Object with the same properties.
@@ -257,3 +241,7 @@ return it as JsonResult object
             return (res);
         }
 ```
+=======
+### tricky stuffs
+I move scripts tag below head tag in _Layout.cshtml. This will making sure jQueries are loaded before our scripts loaded
+>>>>>>> 787fab1147c3e4a9e4eeeba44e9445fe2a37d12b
