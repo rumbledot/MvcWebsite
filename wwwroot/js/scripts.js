@@ -40,6 +40,7 @@ function addNewStiky(id, type, StikyText) {
 }
 
 // get Stikies from database
+// and display it
 function updateStikies(id) {
     $.ajax({
         url: "/Boards/GetStikies",
@@ -57,25 +58,51 @@ function updateStikies(id) {
         $('#container-stikies').empty();
         $.each(response, function (i, s) {
             var text = s.text;
+            var stiky;
             switch (s.type) {
                 case "text":
-                    var stiky = '<div class="col-8 justify-content-center" stye="word-wrap:break-word"><p>' + text + '</p></div>';
-                    console.log('text', s.text)
+                    stiky = '<div class="col col-8" stye="word-wrap:break-word"><p>' + text + '</p>';
                     break;
                 case "image":
-                    var stiky = '<div class="col-8 justify-content-center"><img class="lg-image" src="' + text + '" alt="' + s.text + '"/></div>';
-                    console.log('image', s.text)
+                    stiky = '<div class="col col-8"><img class="lg-image" src="' + text + '" alt="' + s.text + '"/>';
                     break;
-                case "list":
+                case "list":                    
                     break;
                 default:
                     break;
             }
+            stiky += '<a data-stikyId="' + s.id + '" class="btn btn-sm btn-dark text-light">edit</a></div>';
             stiky += '<div class="col-8 justify-content-center"><h3>*</h3></div>';
             $('#container-stikies').append(stiky);
         });
     });
 }
+
+// ajax upload image to server
+$('#btnUploadStikyPic').on('click', (e) => {
+    var fileUpload = $("#newStikyPic").get(0);
+    var files = fileUpload.files;
+
+    var data = new FormData();
+    data.append('newStikyPic', files[0]);
+
+    $.ajax({
+        url: "/Boards/NewStikyImage",
+        type: "POST",
+        data: data,
+        contentType: false,
+        processData: false,
+        error: function (err) {
+            alert("ERROR : " + err.statusText);
+        }
+    }).done((response) => {
+        var id = $('#btnUploadStikyPic').attr('data-boardid');
+        if (response != 'failed') {
+            addNewStiky(id, 'image', response);
+        }
+    });
+    e.preventDefault();
+});
 
 // New STIKY TEXT
 // Button event Upload
@@ -89,7 +116,7 @@ $('#btnAddStikyText').on('click', (e) => {
 // textarea word counter
 $("#newStiky").on('keyup', function () {
     var words = $("#newStiky").val().length;
-    var left = 255 - words;
+    var left = 999 - words;
 
     $('#wordCounter').text(left);
 });
@@ -110,33 +137,7 @@ $("#newStikyPic").change(function () {
     }
 });
 
-// FILE UPLOAD FUNCTIONS
-// AJAX Upload
-$('#btnUploadStikyPic').on('click', (e) => {
-    var fileUpload = $("#newStikyPic").get(0);
-    var files = fileUpload.files;
-
-    var data = new FormData();
-    data.append('newStikyPic', files[0]);
-
-    $.ajax({
-        url: "/Boards/NewStikyImage",
-        type: "POST",
-        data: data,
-        contentType: false,
-        processData: false,
-        error: function (err) {
-            alert("ERROR : " + err.statusText);
-        }
-    }).done((response) => {
-        var id = $('#btnUploadStikyPic').attr('data-boardid');
-        console.log('ID : ' + id);
-        console.log('res : ' + response);
-        addNewStiky(id, 'image', response);
-    });
-    e.preventDefault();
-});
-
+// IMAGE PREVIEW FUNCTIONS
 //get file size
 function GetFileSize(fileid) {
     try {

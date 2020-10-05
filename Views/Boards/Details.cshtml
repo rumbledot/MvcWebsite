@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "details";
     var board = (Board)ViewData["board"];
-    var stikies = (IEnumerable<Stiky>)ViewData["stikies"];
 }
 
 @section Scripts {
@@ -13,7 +12,7 @@
     }
 }
 
-<div class="container-md justify-content-center">
+<div class="container-fluid justify-content-center">
 
     <div class="row">
         <p><small>@board.CreatedAt</small></p>
@@ -29,7 +28,7 @@
 
     <div class="row mb-3 justify-content-center">
         <div class="btn-group border-bottom">
-            <a asp-action="Edit" asp-route-id="@board.Id" class="btn btn-sm btn-dark">Edit</a>
+            <a asp-action="Edit" asp-route-id="@board.Id" class="btn btn-sm btn-dark">edit</a>
             <a class="btn btn-light btn-block" asp-action="Index"><img class="small-image" src="/images/to_boards.png" alt="">&nbsp;boards</a>
         </div>
     </div>
@@ -40,10 +39,11 @@
         </div>
     </div>
 
-    <div id="container-stikies" class="row mb-3 justify-content-center">
+    <div id="container-stikies" class="row d-flex justify-content-center">
     </div>
 
     <div class="row mb-3 justify-content-center border-bottom"></div>
+
     <div class="row m-3 justify-content-center">
         <div class="col-2">
             <div class="list-group list-group-flush" id="stikyTabs" role="tablist">
@@ -88,9 +88,16 @@
         </div>
     </div>
 
+    <div class="row mb-3 justify-content-center">
+        <div class="btn-group border-bottom">
+            <a asp-action="Edit" asp-route-id="@board.Id" class="btn btn-sm btn-dark">edit</a>
+            <a class="btn btn-light btn-block" asp-action="Index"><img class="small-image" src="/images/to_boards.png" alt="">&nbsp;boards</a>
+        </div>
     </div>
 
-    <script src="~/js/scripts.js" asp-append-version="true"></script>
-    <script>
+</div>
+
+<script src="~/js/scripts.js" asp-append-version="true"></script>
+<script>
     updateStikies(@board.Id);
-    </script>
+</script>
