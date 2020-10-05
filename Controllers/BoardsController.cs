@@ -31,6 +31,13 @@ namespace MvcWebsite.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        public class StikyHolder
+        { 
+            public string Type { get; set; }
+            public string Text { get; set; }
+            public string BoardId { get; set; }
+        }
+
         // GET: Boards
         public async Task<IActionResult> Index()
         {
@@ -62,7 +69,8 @@ namespace MvcWebsite.Controllers
             return View();
         }
 
-        public async Task<IActionResult> GetStikies(int Id) {
+        // POST: Boards/GetStikies
+        public IActionResult GetStikies(int Id) {
             IEnumerable<Stiky> stikies = from s in _context.Stiky
                                          where s.BoardId == Id
                                          select s;
@@ -75,27 +83,23 @@ namespace MvcWebsite.Controllers
         // POST: Boards/NewStiky
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NewStiky([FromBody] Stiky stiky)
+        public async Task<IActionResult> NewStiky([FromBody] StikyHolder stiky)
         {
             string text = stiky.Text;
             if (!string.IsNullOrEmpty(text) && text.Length > 4 && text.Length < 255)
             {
                 Stiky newS = new Stiky()
                 {
-                    Type = "text",
+                    Type = stiky.Type,
                     Text = stiky.Text,
-                    BoardId = stiky.BoardId
+                    BoardId = int.Parse(stiky.BoardId)
                 };
 
                 _context.Add(newS);
                 await _context.SaveChangesAsync();
             };
 
-            IEnumerable<Stiky> stikies = from s in _context.Stiky
-                                             where s.BoardId == stiky.BoardId
-                                             select s;
-
-            JsonResult res = new JsonResult(stikies);
+            JsonResult res = new JsonResult("success");
 
             return (res);
         }
@@ -106,9 +110,7 @@ namespace MvcWebsite.Controllers
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
             string contentRootPath = _hostingEnvironment.ContentRootPath;
-            Console.WriteLine("FILE : " + newStikyPic);
-            Console.WriteLine("WebRootPath : " + webRootPath);
-            Console.WriteLine("WebRootPath : " + contentRootPath);
+            JsonResult res;
 
             if (ModelState.IsValid)
             {
@@ -118,22 +120,27 @@ namespace MvcWebsite.Controllers
                 {
                     ModelState.AddModelError("File", "Please file of type: " + string.Join(", ", AllowedFileExtensions));
                 }
-                Console.WriteLine("PAST THE EXTENSION IF BLOCK");
 
                 //string webRootPath = _hostingEnvironment.WebRootPath;
                 //string contentRootPath = _hostingEnvironment.ContentRootPath;
 
                 var fileName = Path.GetFileName(newStikyPic.FileName);
                 var path = Path.Combine(webRootPath, "uploaded", fileName);
+
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
                     await newStikyPic.CopyToAsync(fileStream);
                 }
                 ModelState.Clear();
-                ViewBag.Message = "File uploaded successfully";
-
+                res = new JsonResult("/uploaded/" + fileName);
             }
-            return RedirectToAction(nameof(Index));
+            else {
+                res = new JsonResult("failed");
+            }
+
+            //return RedirectToAction(nameof(Index));
+
+            return (res);
         }
 
         // GET: Boards/Create

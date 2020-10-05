@@ -1,29 +1,37 @@
-﻿function addNewStiky(id) {
-    var StikyText = $('#newStiky').val();
+﻿// List tabs
+$('a[data-toggle="list"]').on('shown.bs.tab', function (e) {
+    e.target // newly activated tab
+    e.relatedTarget // previous active tab
+})
+
+// AJAX Functions
+// add new Stiky to database
+function addNewStiky(id, type, StikyText) {
     var form = $('#__AjaxAntiForgeryForm');
     var token = $('input[name="__RequestVerificationToken"]', form).val();
 
     if (StikyText || StikyText.length > 4) {
+        var stiky = {};
+        stiky.Type = type;
+        stiky.Text = StikyText;
+        stiky.BoardId = id;
+
         $.ajax({
-            url: "/Boards/NewStiky",
+            url: '/Boards/NewStiky',
+            type: 'POST',
             headers: {
-                "RequestVerificationToken": token
+                'RequestVerificationToken': token
             },
-            type: "POST",
-            data: JSON.stringify({
-                Text: StikyText,
-                BoardId: id
-            }),
-            dataType: 'JSON',
+            dataType: 'json',
+            data: JSON.stringify(stiky),
             async: true,
-            contentType: 'application/json; charset=UTF-8',
+            contentType: 'application/json',
             error: function (xhRequest, ErrorText, thrownError) {
                 console.log('OH NOOOO');
             }
-        }).done((response) => {
-            updateStikies(response);
+        }).done(() => {
+            updateStikies(id);
         });
-
     } else {
         $('#newStiky').attr('placeholder', 'Stiky can\'t be empty');
     }
@@ -31,14 +39,52 @@
     $('#newStiky').val('');
 }
 
-function updateStikies(stikies) {
-    var stikies_container = $('#container-stikies');
-    stikies_container.empty();
-    $.each(stikies, function (i, s) {
-        var stiky = '<div class="col-8" stye="word-wrap:break-word"><p>' + s.text + '</p></div>';
-        stikies_container.append(stiky);
+// get Stikies from database
+function updateStikies(id) {
+    $.ajax({
+        url: "/Boards/GetStikies",
+        type: "GET",
+        data: {
+            Id: id
+        },
+        dataType: 'JSON',
+        async: true,
+        contentType: 'application/json; charset=UTF-8',
+        error: function (xhRequest, ErrorText, thrownError) {
+            console.log('OH NOOOO');
+        }
+    }).done((response) => {
+        $('#container-stikies').empty();
+        $.each(response, function (i, s) {
+            var text = s.text;
+            switch (s.type) {
+                case "text":
+                    var stiky = '<div class="col-8 justify-content-center" stye="word-wrap:break-word"><p>' + text + '</p></div>';
+                    console.log('text', s.text)
+                    break;
+                case "image":
+                    var stiky = '<div class="col-8 justify-content-center"><img class="lg-image" src="' + text + '" alt="' + s.text + '"/></div>';
+                    console.log('image', s.text)
+                    break;
+                case "list":
+                    break;
+                default:
+                    break;
+            }
+            stiky += '<div class="col-8 justify-content-center"><h3>*</h3></div>';
+            $('#container-stikies').append(stiky);
+        });
     });
 }
+
+// New STIKY TEXT
+// Button event Upload
+$('#btnAddStikyText').on('click', (e) => {
+    var StikyText = $('#newStiky').val();
+    var id = $('#btnAddStikyText').attr('data-boardid');
+
+    addNewStiky(id, 'text', StikyText);
+});
 
 // textarea word counter
 $("#newStiky").on('keyup', function () {
@@ -48,12 +94,7 @@ $("#newStiky").on('keyup', function () {
     $('#wordCounter').text(left);
 });
 
-// List tabs
-$('a[data-toggle="list"]').on('shown.bs.tab', function (e) {
-    e.target // newly activated tab
-    e.relatedTarget // previous active tab
-})
-
+// New STIKY IMAGE
 // Stiky Image previewer
 $("#newStikyPic").change(function () {
     var data = new FormData();
@@ -69,26 +110,39 @@ $("#newStikyPic").change(function () {
     }
 });
 
-function previewPic(input) {
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-            $('#newStikyPicPreview').attr('src', e.target.result);
-        }
-
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
 // FILE UPLOAD FUNCTIONS
+// AJAX Upload
+$('#btnUploadStikyPic').on('click', (e) => {
+    var fileUpload = $("#newStikyPic").get(0);
+    var files = fileUpload.files;
+
+    var data = new FormData();
+    data.append('newStikyPic', files[0]);
+
+    $.ajax({
+        url: "/Boards/NewStikyImage",
+        type: "POST",
+        data: data,
+        contentType: false,
+        processData: false,
+        error: function (err) {
+            alert("ERROR : " + err.statusText);
+        }
+    }).done((response) => {
+        var id = $('#btnUploadStikyPic').attr('data-boardid');
+        console.log('ID : ' + id);
+        console.log('res : ' + response);
+        addNewStiky(id, 'image', response);
+    });
+    e.preventDefault();
+});
 
 //get file size
 function GetFileSize(fileid) {
     try {
         var fileSize = 0;
         //for IE
-        if ($.browser.msie) {
+        if (navigator.userAgent.search("MSIE") >= 0) {
             //before making an object of ActiveXObject,
             //please make sure ActiveX is enabled in your IE browser
             var objFSO = new ActiveXObject("Scripting.FileSystemObject"); var filePath = $("#" + fileid)[0].value;
@@ -150,5 +204,17 @@ function checkfile() {
         else {
             $("#spanfile").text("");
         }
+    }
+}
+
+function previewPic(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#newStikyPicPreview').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
     }
 }

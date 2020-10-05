@@ -45,6 +45,18 @@ namespace MvcWebsite.Models
             }
         }
 
+        public string ShortText {
+            get {
+                if (Text.Length > 50)
+                {
+                    return Text.Substring(0, 50);
+                }
+                else {
+                    return Text;
+                }
+            }
+        }
+
         public Board() {
             BoardColor = PEG_WHITE;
             CreatedAt = DateTime.Today;

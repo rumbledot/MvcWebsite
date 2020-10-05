@@ -13,7 +13,7 @@
     }
 }
 
-<div class="container justify-content-center">
+<div class="container-md justify-content-center">
 
     <div class="row">
         <p><small>@board.CreatedAt</small></p>
@@ -41,25 +41,18 @@
     </div>
 
     <div id="container-stikies" class="row mb-3 justify-content-center">
-        @foreach (Stiky s in stikies)
-        {
-            <div class="col-8" style="word-wrap:break-word">
-                <div>
-                    <p>@s.Text</p>
-                </div>
-            </div>
-        }
     </div>
 
-    <div class="row mb-3 justify-content-center">
+    <div class="row mb-3 justify-content-center border-bottom"></div>
+    <div class="row m-3 justify-content-center">
         <div class="col-2">
-            <div class="list-group" id="stikyTabs" role="tablist">
+            <div class="list-group list-group-flush" id="stikyTabs" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="text-tab" href="#text" role="tab" aria-controls="text"
-                       aria-selected="true" data-toggle="list">Stiky Text</a>
+                   aria-selected="true" data-toggle="list">Stiky Text</a>
                 <a class="list-group-item list-group-item-action" id="list-tab" href="#list" role="tab" aria-controls="list"
-                       aria-selected="false" data-toggle="list">Stiky List</a>
+                   aria-selected="false" data-toggle="list">Stiky List</a>
                 <a class="list-group-item list-group-item-action" id="image-tab" href="#image" role="tab" aria-controls="image"
-                       aria-selected="false" data-toggle="list">Stiky Pic</a>
+                   aria-selected="false" data-toggle="list">Stiky Pic</a>
             </div>
         </div>
         <div class="col-6">
@@ -68,32 +61,36 @@
                     <label for="newStiky" class="sr-only">New Stiky note</label>
                     <textarea name="newStiky" class="form-control mb-2" id="newStiky" placeholder="New stiky note" rows="4" maxlength="999"></textarea>
 
-                    <button onclick="addNewStiky(@board.Id)" class="btn btn-sm btn-light float-right">Add</button>
+                    <button data-boardid="@board.Id" class="btn btn-sm btn-light float-right" id="btnAddStikyText">pin down</button>
                     <p id="wordCounter" class="float-left">999</p>
                 </div>
                 <div class="tab-pane fade" id="list" role="tabpanel" aria-labelledby="list-tab">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                        <label class="custom-control-label" for="customCheck1">Check this custom checkbox</label>
+                    <div class="form-group">
+                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <input type="text" class="form-control" id="newStikyList" placeholder="new list item..">
                     </div>
                 </div>
                 <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
-                    @using (Html.BeginForm("NewStikyImage", "Boards", FormMethod.Post, new { enctype = "multipart/form-data" }))
-                    {
-                        @*@Html.ValidationSummary();*@
-                        <input type='file' class="custom-file-input" id="newStikyPic" name="newStikyPic"/>
-                        <label class="custom-file-label" for="customFile">Choose file</label>
-                        <span class="text-danger" id="spanfile"></span>
+                    @*@Html.ValidationSummary();*@
 
-                        <img class="med-image" src="\images\empty_pic.png" alt="UploadedImage" id="newStikyPicPreview" />
+                    @* input box and label and warning span *@
+                    <input type='file' class="custom-file-input" id="newStikyPic" name="newStikyPic" />
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                    <span class="text-danger" id="spanfile"></span>
 
-                        <input type="submit" id="btnUpload" class="btn btn-sm btn-dark" value="Upload" />
-                    }
+                    @* img preview before upload *@
+                    <img class="med-image" src="\images\empty_pic.png" alt="UploadedImage" id="newStikyPicPreview" />
+
+                    @* upload button *@
+                    <button data-boardid="@board.Id" class="btn btn-sm btn-dark" id="btnUploadStikyPic">pin down</button>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
+    </div>
 
-<script src="~/js/scripts.js" asp-append-version="true"></script>
+    <script src="~/js/scripts.js" asp-append-version="true"></script>
+    <script>
+    updateStikies(@board.Id);
+    </script>

@@ -192,7 +192,7 @@ to Razor @Html helper
 ### tricky stuffs
 1. I move scripts tags below head tags in _Layout.cshtml. This will making sure jQueries are loaded before our scripts.
 
-2. pass Verification token in the ajax header. Like so:
+2. pass Verification token in the jQuery ajax header. Like so:
 ```
     var form = $('#__AjaxAntiForgeryForm');
     var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -223,6 +223,29 @@ and in Razor page add:
                 Text: StikyText,
                 BoardId: id
             }),
+```
+
+and my Stiky class:
+
+```
+    public class Stiky
+    {
+        public int Id { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+        public string Type { get; set; }
+        // $.ajax JSON object follows these properties 
+        public string Text { get; set; }
+        public int BoardId { get; set; }
+        //
+        public virtual Board Board { get; set; }
+
+        public Stiky()
+        {
+            Type = "text";
+            CreatedAt = DateTime.Today;
+        }
+    }
 ```
 
 in the controller : in the function parameter add [FromBody] Object obj !!!
@@ -257,3 +280,27 @@ return it as JsonResult object
             return (res);
         }
 ```
+
+4. The above method create a problem. In the AJAX I use JSON.Stringify that convert the data to string. 
+
+The Controller don't accept it because the data doesn't match one of the integer object's property.
+
+---Solution---: create a dummy class that have string properties. Convert to other type as neccessary.
+
+Clipboard
+
+@using (Html.BeginForm("NewStikyImage", "Boards", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @*@Html.ValidationSummary();*@
+
+                        @*input box and label and warning span *@
+                        <!--<input type='file' class="custom-file-input" id="newStikyPic" name="newStikyPic" />
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                        <span class="text-danger" id="spanfile"></span>-->
+
+                         @*img preview before upload *@
+                        <img class="med-image" src="\images\empty_pic.png" alt="UploadedImage" id="newStikyPicPreview" />
+
+                         @*upload button *@
+                        <input type="submit" id="btnUpload" class="btn btn-sm btn-dark" value="Upload" />
+                    }
