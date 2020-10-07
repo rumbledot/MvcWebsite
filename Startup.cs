@@ -29,7 +29,7 @@ namespace MvcWebsite
             services.AddControllersWithViews();
 
             services.AddDbContext<MvcWebsiteContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("MvcWebsiteContext")));
+            options.UseSqlServer(Configuration.GetConnectionString("MyRemoteDb")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

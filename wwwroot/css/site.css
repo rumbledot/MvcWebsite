@@ -3,9 +3,14 @@
 }
 
 /* Colors */
-.list-group a.active {
+.nav.nav-pills a.active {
     background-color:black;
     text-decoration-color:white
+}
+
+.nav.nav-pills a:hover {
+    text-decoration-color:black;
+    font-weight:bolder;
 }
 
 .bg-white {
